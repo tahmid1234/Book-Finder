@@ -1,5 +1,5 @@
 import React ,{useState}from "react"
-import Navbar from "./component/navBar"
+import DropDown from './component/DropDOwnList'
 import Searchbar from "./component/searchbar"
 import {getBooks} from "./api/googleBook";
 import BooksList from "./component/BooksList"
@@ -11,6 +11,7 @@ const App=()=>{
   const [currentPage,setCurrentPage]=useState(0)
   const [totalItem,setTotalItems]=useState(0)
   const [totalPages,setTotalPAge]=useState(0)
+  const [selectedItem,setSelectedItem]=useState("relevance")
 
   const initialState=()=>{
     console.log("hello")
@@ -20,10 +21,12 @@ const App=()=>{
   const handleSubmit=async(event)=>{
     
     event.preventDefault()
-    await getBooks(searchTerm,setBooks,currentPage,setTotalItems)
+    await getBooks(searchTerm,setBooks,currentPage,setTotalItems,selectedItem)
     setTotalPAge(Math.round(totalItem/40))
     console.log("books")
-    console.log(books)
+   
+    
+    //console.log(books.kind)
 
 
   }
@@ -34,25 +37,42 @@ const App=()=>{
     return
   }
 
+  const onSelect = async (item)=>{
+    console.log("Item",item)
+    setSelectedItem(item)
+    if(searchTerm!="search+terms"){
+      await getBooks(searchTerm,setBooks,currentPage,setTotalItems,selectedItem)
+    }
+
+  }
+
   const nextPage = async(page_number) =>{
     setCurrentPage(page_number)
-    await getBooks(searchTerm,setBooks,currentPage,setTotalItems)
+    await getBooks(searchTerm,setBooks,currentPage,setTotalItems,selectedItem)
 
   } 
 
-  return <div><Navbar/>
+  return <div>
+    <div className="col">
+    <DropDown onSelect={onSelect}></DropDown>
+   
     <Searchbar handleChange={handleChange} handleSubmit={handleSubmit}/>
+   
+    </div>
     <BooksList books={books}/>
-    <div style={{marginTop:20,marginBottom:20}}></div>
+    {
+      console.log(totalItem,"  ki holo hello ")
+    }
   
     {
+      
       totalItem>39
       ?<Pagination
         nextPage={nextPage}
         currentPage={currentPage}
         totalPages={totalPages}
       />
-      :  "hello"
+      :  ""
     }
   </div>
 }

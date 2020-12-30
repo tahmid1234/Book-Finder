@@ -1,12 +1,12 @@
 import React from 'react'
-
+import {Link} from 'react-router-dom'
 
 const Navbar=()=>{
     return(
         <div>
             <nav style={{backgroundColor:'black'}}>
                 <div class="nav-wrapper">
-                    <a href="#" className="brand-logo" style={{marginLeft:20}}>Book Finder</a>
+                    <Link to="/" className="brand-logo" style={{marginLeft:20}}>Book Finder</Link>
                     <ul id="nav-mobile" className="right hide-on-med-and-down">
 
                              <li>
